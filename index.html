@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendaftaran KRK PDPKK</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      font-style: italic;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    input {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    button {
+      padding: 14px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+    }
+    .thank-you {
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="formContainer">
+  <h1>Pendaftaran</h1>
+  <h2>KRK PDPKK Hati Kudus Yesus</h2>
+  <h3>Tasikmalaya</h3>
+  <p><strong>"Peziarah Harapan, Penuh Sukacita"</strong><br/>
+     bersama Romo Eko Wahyu, OSC.<br/>
+     Kamis, 23 Oktober 2025<br/>
+     Open Gate Jam 17.00 WIB<br/>
+     Gereja Hati Kudus Yesus Tasikmalaya
+  </p>
+
+  <form id="form">
+    <input name="nama" placeholder="Nama Lengkap" required />
+    <input name="paroki" placeholder="Asal Paroki / Lingkungan" required />
+    <input name="kota" placeholder="Kota" required />
+    <input name="whatsapp" placeholder="No WhatsApp" required />
+    <button type="submit">Daftar Sekarang</button>
+  </form>
+</div>
+
+<div class="container thank-you" id="thankYou">
+  <h2>Terima kasih anda telah mendaftar</h2>
+  <p>Silahkan lakukan pembayaran.<br />Tiket akan dikirim melalui WhatsApp setelah pembayaran diterima.</p>
+</div>
+
+<div class="footer">
+  <p>Untuk informasi lebih lanjut hubungi:</p>
+  <p><strong>Yuli - 0818-0937-9168</strong></p>
+</div>
+
+<script>
+  const form = document.getElementById("form");
+  const formContainer = document.getElementById("formContainer");
+  const thankYou = document.getElementById("thankYou");
+
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbwuUrDG495XvlcVK_-54ARj0aDti0KNawblulZtvAw_NgV4-7zGsdWhFbM_j5Xns_D2Pg/exec", {
+        method: "POST",
+        body: formData
+      });
+      formContainer.style.display = "none";
+      thankYou.style.display = "block";
+    } catch {
+      alert("Gagal mengirim. Silakan coba lagi.");
+    }
+  });
+</script>
+
+</body>
+</html>
