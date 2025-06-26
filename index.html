@@ -78,10 +78,10 @@
   </p>
 
   <form id="form">
-    <input name="nama" placeholder="Nama Lengkap" required />
-    <input name="paroki" placeholder="Asal Paroki / Lingkungan" required />
-    <input name="kota" placeholder="Kota" required />
-    <input name="whatsapp" placeholder="No WhatsApp" required />
+    <input name="nama" placeholder="Nama Lengkap" required maxlength="25" />
+    <input name="paroki" placeholder="Asal Paroki / Lingkungan" required maxlength="18" />
+    <input name="kota" placeholder="Kota" required maxlength="25" />
+    <input name="whatsapp" placeholder="No WhatsApp (Contoh: 081234567890)" required maxlength="12" pattern="0\d{9,11}" title="Nomor harus dimulai dengan 0 dan maksimal 12 digit" />
     <button type="submit">Daftar Sekarang</button>
   </form>
 </div>
@@ -103,6 +103,22 @@
 
   form.addEventListener("submit", async function(e) {
     e.preventDefault();
+
+    const nama = form.nama.value.trim();
+    const paroki = form.paroki.value.trim();
+    const kota = form.kota.value.trim();
+    const whatsapp = form.whatsapp.value.trim();
+
+    if (nama.length > 25 || paroki.length > 18 || kota.length > 25) {
+      alert("Cek kembali panjang karakter input Anda.");
+      return;
+    }
+
+    if (!/^0\d{9,11}$/.test(whatsapp)) {
+      alert("Nomor WhatsApp harus dimulai dengan 0 dan maksimal 12 digit.");
+      return;
+    }
+
     const formData = new FormData(form);
 
     try {
