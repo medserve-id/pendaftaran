@@ -1,108 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendaftaran KRK PDPKK</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      font-style: italic;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    input {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    button {
+      padding: 14px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+    }
+    .thank-you {
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="formContainer">
+  <h1>Pendaftaran</h1>
+  <h2>KRK PDPKK Hati Kudus Yesus</h2>
+  <h3>Tasikmalaya</h3>
+  <p><strong>"Peziarah Harapan, Penuh Sukacita"</strong><br/>
+     bersama Romo Eko Wahyu, OSC.<br/>
+     Kamis, 23 Oktober 2025<br/>
+     Open Gate Jam 17.00 WIB<br/>
+     Gereja Hati Kudus Yesus Tasikmalaya
+  </p>
+
+  <form id="form">
+    <input name="nama" placeholder="Nama Lengkap" required maxlength="25" />
+    <input name="paroki" placeholder="Asal Paroki / Lingkungan" required maxlength="18" />
+    <input name="kota" placeholder="Kota" required maxlength="25" />
+    <input name="whatsapp" placeholder="No WhatsApp (Contoh: 081234567890)" required maxlength="12" pattern="0\d{9,11}" title="Nomor harus dimulai dengan 0 dan maksimal 12 digit" />
+    <button type="submit">Daftar Sekarang</button>
+  </form>
+</div>
+
+<div class="container thank-you" id="thankYou">
+  <h2>Terima kasih anda telah mendaftar</h2>
+  <p>Silahkan lakukan pembayaran.<br />Tiket akan dikirim melalui WhatsApp setelah pembayaran diterima.</p>
+</div>
+
+<div class="footer">
+  <p>Untuk informasi lebih lanjut hubungi:</p>
+  <p><strong>Yuli - 0818-0937-9168</strong></p>
+</div>
+
 <script>
-    // URL Web App Google Apps Script Anda
-    const APPS_SCRIPT_URL_FORM = 'https://script.google.com/macros/s/AKfycbwuUrDG495XvlcVK_-54ARj0aDti0KNawblulZtvAw_NgV4-7zGsdWhFbM_j5Xns_D2Pg/exec'; 
+  const form = document.getElementById("form");
+  const formContainer = document.getElementById("formContainer");
+  const thankYou = document.getElementById("thankYou");
 
-    const form = document.getElementById("form");
-    const formContainer = document.getElementById("formContainer");
-    const thankYou = document.getElementById("thankYou");
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-    // Menambahkan div untuk pesan respons (sukses/gagal)
-    const responseMessageDiv = document.createElement('div');
-    responseMessageDiv.id = 'responseMessage';
-    responseMessageDiv.style.marginTop = '20px';
-    responseMessageDiv.style.padding = '10px';
-    responseMessageDiv.style.borderRadius = '8px';
-    responseMessageDiv.style.fontWeight = 'bold';
-    responseMessageDiv.style.textAlign = 'center';
-    responseMessageDiv.style.display = 'none'; // Awalnya tersembunyi
-    form.parentNode.insertBefore(responseMessageDiv, form.nextSibling); // Masukkan setelah form
+    const nama = form.nama.value.trim();
+    const paroki = form.paroki.value.trim();
+    const kota = form.kota.value.trim();
+    const whatsapp = form.whatsapp.value.trim();
 
-    form.addEventListener("submit", async function(e) {
-        e.preventDefault();
+    if (nama.length > 25 || paroki.length > 18 || kota.length > 25) {
+      alert("Cek kembali panjang karakter input Anda.");
+      return;
+    }
 
-        // Tampilkan pesan loading
-        responseMessageDiv.style.display = 'block';
-        responseMessageDiv.style.backgroundColor = '#e0f2f7';
-        responseMessageDiv.style.color = '#007bff';
-        responseMessageDiv.textContent = 'Memproses pendaftaran Anda...';
-        form.querySelector('button').disabled = true; // Nonaktifkan tombol saat memproses
+    if (!/^0\d{9,11}$/.test(whatsapp)) {
+      alert("Nomor WhatsApp harus dimulai dengan 0 dan maksimal 12 digit.");
+      return;
+    }
 
-        const nama = form.nama.value.trim();
-        const paroki = form.paroki.value.trim();
-        const kota = form.kota.value.trim();
-        let whatsapp = form.whatsapp.value.trim(); // Gunakan let karena akan diformat
+    const formData = new FormData(form);
 
-        // Validasi panjang karakter (dari kode Anda)
-        if (nama.length > 25 || paroki.length > 18 || kota.length > 25) {
-            responseMessageDiv.style.backgroundColor = '#ffe6e6';
-            responseMessageDiv.style.color = '#dc3545';
-            responseMessageDiv.textContent = "❌ Error: Cek kembali panjang karakter input Anda. Nama (max 25), Paroki (max 18), Kota (max 25).";
-            form.querySelector('button').disabled = false;
-            return;
-        }
-
-        // Validasi format nomor WhatsApp (dari kode Anda, tapi perhatikan format di backend)
-        // Di backend, kita mengonversi 08 menjadi 628, jadi validasi ini cukup
-        if (!/^0\d{9,11}$/.test(whatsapp)) {
-            responseMessageDiv.style.backgroundColor = '#ffe6e6';
-            responseMessageDiv.style.color = '#dc3545';
-            responseMessageDiv.textContent = "❌ Error: Nomor WhatsApp harus dimulai dengan 0 dan terdiri dari 10-12 digit.";
-            form.querySelector('button').disabled = false;
-            return;
-        }
-
-        // Kumpulkan data ke objek JavaScript biasa
-        const dataToSend = {
-            action: 'registerNewPendaftar', // Ini sangat penting untuk Apps Script
-            nama: nama,
-            paroki: paroki,
-            kota: kota,
-            whatsapp: whatsapp
-        };
-
-        try {
-            const response = await fetch(APPS_SCRIPT_URL_FORM, {
-                method: "POST",
-                mode: "cors", // Penting agar bisa membaca respons dari Apps Script
-                headers: {
-                    'Content-Type': 'application/json' // Memberitahu server bahwa kita mengirim JSON
-                },
-                body: JSON.stringify(dataToSend) // Mengirim data sebagai string JSON
-            });
-
-            // Pastikan respons dari Apps Script OK dan bisa diurai sebagai JSON
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json(); // Membaca respons JSON dari Apps Script
-
-            if (result.success) {
-                // Tampilkan pesan sukses dan sembunyikan formulir
-                responseMessageDiv.style.backgroundColor = '#e6ffe6';
-                responseMessageDiv.style.color = '#28a745';
-                responseMessageDiv.textContent = `✅ ${result.message} No. Pendaftaran Anda: ${result.noPendaftaran}`;
-                
-                // Sembunyikan form dan tampilkan pesan terima kasih
-                formContainer.style.display = "none";
-                thankYou.style.display = "block";
-                
-                form.reset(); // Reset form setelah sukses
-            } else {
-                // Tampilkan pesan error dari server
-                responseMessageDiv.style.backgroundColor = '#ffe6e6';
-                responseMessageDiv.style.color = '#dc3545';
-                responseMessageDiv.textContent = `❌ ${result.message}`;
-                console.error("Server responded with error:", result.details || result.message);
-            }
-
-        } catch (error) {
-            console.error('Error saat mendaftar:', error);
-            responseMessageDiv.style.backgroundColor = '#ffe6e6';
-            responseMessageDiv.style.color = '#dc3545';
-            responseMessageDiv.textContent = `❌ Pendaftaran gagal: ${error.message}. Periksa koneksi internet atau coba lagi.`;
-        } finally {
-            form.querySelector('button').disabled = false; // Aktifkan kembali tombol
-        }
-    });
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbwuUrDG495XvlcVK_-54ARj0aDti0KNawblulZtvAw_NgV4-7zGsdWhFbM_j5Xns_D2Pg/exec", {
+        method: "POST",
+        body: formData
+      });
+      formContainer.style.display = "none";
+      thankYou.style.display = "block";
+    } catch {
+      alert("Gagal mengirim. Silakan coba lagi.");
+    }
+  });
 </script>
+
+</body>
+</html>
