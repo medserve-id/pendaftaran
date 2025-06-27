@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard KRK PDPKK</title>
+  <style>
+    body { font-family: sans-serif; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background-color: #1976d2; color: white; }
+    button { padding: 5px 10px; border: none; border-radius: 4px; color: white; }
+    .merah { background: #c62828; }
+    .hijau { background: #2e7d32; }
+  </style>
+</head>
+<body>
+  <h2>Dashboard Panitia KRK PDPKK</h2>
+  <div id="data">Memuat data...</div>
+
+  <script>
+    const sheetID = "ISI_DENGAN_SHEET_ID_KAMU";
+    const url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/values?alt=json`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const entries = data.feed.entry;
+        if (!entries) {
+          document.getElementById("data").innerText = "❌ Data kosong";
+          return;
+        }
+
+        let html = "<table><thead><tr><th>No.</th><th>Nama</th><th>Paroki</th><th>Kota</th><th>WA</th><th>Kirim</th></tr></thead><tbody>";
+        entries.forEach((row, i) => {
+          const nama = row.gsx$nama.$t;
+          const paroki = row.gsx$paroki.$t;
+          const kota = row.gsx$kota.$t;
+          const wa = row.gsx$whatsapp.$t;
+
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${nama}</td>
+            <td>${paroki}</td>
+            <td>${kota}</td>
+            <td>${wa}</td>
+            <td><button class="merah" onclick="this.className='hijau';this.innerText='Terkirim'">Kirim</button></td>
+          </tr>`;
+        });
+        html += "</tbody></table>";
+        document.getElementById("data").innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById("data").innerText = "❌ Gagal memuat data: " + err;
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
 
